@@ -44,6 +44,12 @@ android {
         daoPackage 'com.weimore.caringhelper.greendao.gen'
         targetGenDir 'src/main/java'
     }
+    sourceSets{
+        main{
+            jniLibs.srcDir 'libs'
+        }
+    }
+
 }
 
 dependencies {
@@ -52,10 +58,15 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
+    //noinspection GradleCompatible
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     annotationProcessor "org.projectlombok:lombok:$lombok_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
     implementation "org.greenrobot:greendao:$greendao_version"
     implementation "org.greenrobot:greendao-generator:$greendao_version"
+
+    implementation files('libs/BaiduLBS_Android.jar')
+    implementation files('libs/component_common_sdk_1.0.0.jar')
+    implementation files('libs/IndoorscapeAlbumPlugin.jar')
 }

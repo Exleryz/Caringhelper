@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="T_40">40dp</dimen>
-    <dimen name="T_24">24dp</dimen>
-    <dimen name="T_20">20dp</dimen>
-    <dimen name="T_18">18dp</dimen>
-    <dimen name="T_16">16dp</dimen>
-    <dimen name="T_14">14dp</dimen>
-    <dimen name="T_13">13dp</dimen>
-    <dimen name="T_12">12dp</dimen>
-    <dimen name="T_10">10dp</dimen>
+    <dimen name="T_40">40sp</dimen>
+    <dimen name="T_24">24sp</dimen>
+    <dimen name="T_20">20sp</dimen>
+    <dimen name="T_18">18sp</dimen>
+    <dimen name="T_16">16sp</dimen>
+    <dimen name="T_14">14sp</dimen>
+    <dimen name="T_13">13sp</dimen>
+    <dimen name="T_12">12sp</dimen>
+    <dimen name="T_10">10sp</dimen>
     <dimen name="T_9">9dp</dimen>
 
 </resources>
