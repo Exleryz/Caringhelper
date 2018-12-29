@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/im_code"
+            android:layout_width="100dp"
+            android:gravity="center"
+            android:scaleType="fitXY"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <EditText
+            android:id="@+id/tv_edit"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_theme_stroke_radius10"
+            android:gravity="start|center_vertical"
+            android:maxLength="4"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="#595959"
+            android:textSize="14dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/im_code"
+            android:hint="请输入验证码" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="25dp"
+            android:background="#2c000000"
+            app:layout_constraintTop_toBottomOf="@id/tv_edit" />
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="取消"
+            android:textColor="@color/colorTheme"
+            android:textSize="17dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/line2"
+            app:layout_constraintTop_toBottomOf="@id/line" />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="1px"
+            android:layout_height="0dp"
+            android:background="#2c000000"
+            app:layout_constraintBottom_toBottomOf="@id/tv_cancel"
+            app:layout_constraintLeft_toRightOf="@id/tv_cancel"
+            app:layout_constraintRight_toLeftOf="@+id/tv_confirm"
+            app:layout_constraintTop_toTopOf="@id/tv_cancel" />
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="确定"
+            android:textColor="@color/colorTheme"
+            android:textSize="17dp"
+            app:layout_constraintLeft_toRightOf="@id/line2"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>

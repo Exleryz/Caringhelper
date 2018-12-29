@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Toolbar">
+        <attr name="toolbar_background" format="reference"/>
+        <attr name="toolbar_left_image" format="reference" />
+        <attr name="toolbar_left_title" format="string" />
+        <attr name="toolbar_title" format="string" />
+        <attr name="toolbar_right_title" format="string" />
+        <attr name="toolbar_right_image" format="reference" />
+        <attr name="toolbar_transparent_mode" format="boolean"/>
+    </declare-styleable>
+</resources>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_goods_name"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:paddingLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:maxLines="1"
+        android:maxLength="10"
+        android:background="@drawable/bg_theme_stroke_radius10"
+        android:layout_width="match_parent"
+        android:textSize="@dimen/T_14"
+        android:hint="商品类型名"
+        android:layout_height="40dp" />
+
+    <EditText
+        android:id="@+id/et_priority"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:maxLines="1"
+        android:inputType="number"
+        android:maxLength="10"
+        android:background="@drawable/bg_theme_stroke_radius10"
+        android:layout_width="match_parent"
+        android:textSize="@dimen/T_14"
+        android:hint="优先级"
+        android:layout_height="40dp" />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       >
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:textSize="@dimen/T_14"
+            android:gravity="center"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tv_confirm"
+            android:text="取消"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_red_radius10"
+            android:textColor="@color/white"
+            android:layout_width="80dp"
+            android:layout_height="40dp" />
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:textSize="@dimen/T_14"
+            android:gravity="center"
+            android:text="确定"
+            app:layout_constraintLeft_toRightOf="@id/tv_cancel"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_theme_radius10"
+            android:textColor="@color/white"
+            android:layout_width="80dp"
+            android:layout_height="40dp" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</LinearLayout>
