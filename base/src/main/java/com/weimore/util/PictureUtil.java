@@ -38,7 +38,7 @@ public class PictureUtil {
 
 
     public static void startAlbum(Activity activity) {
-        PermissionUtil.permissionRequest(activity, 200, () -> {
+        PermissionUtil.permissionRequest(activity,() -> {
                     Intent intent = new Intent(Intent.ACTION_PICK, null);
                     intent.setDataAndType(
                             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -76,7 +76,7 @@ public class PictureUtil {
             }
             //这里指定存储的uri后，拍照返回的data就会为空，所以要在该方法中照片存储的路径
 //            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(activity, "com.weimore.base.fileProvider", file));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(activity, "com.weimore.caringhelper.fileProvider", file));
             activity.startActivityForResult(intent, CAMERA);
             return file.getAbsolutePath();
         } else {

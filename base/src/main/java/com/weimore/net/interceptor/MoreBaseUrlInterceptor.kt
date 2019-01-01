@@ -20,7 +20,6 @@ class MoreBaseUrlInterceptor : Interceptor {
         val originalRequest = chain.request()
         //获取老的url
         val oldUrl = originalRequest.url()
-        var body: String? = null
 
         val requestBody = originalRequest.body()
         if (requestBody != null) {
@@ -32,7 +31,6 @@ class MoreBaseUrlInterceptor : Interceptor {
             if (contentType != null) {
                 charset = contentType.charset(UTF8)
             }
-            body = buffer.readString(charset)
         }
 
 //        L.d("请求\nurl：" + oldUrl + "\nbody:" + body)

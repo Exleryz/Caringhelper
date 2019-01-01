@@ -4,21 +4,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
+import android.widget.CompoundButton;
 
 import com.weimore.base.BaseActivity;
 import com.weimore.caringhelper.R;
+import com.weimore.caringhelper.config.ConfigKey;
+import com.weimore.caringhelper.databinding.ActivityAppSettingBinding;
 import com.weimore.caringhelper.ui.contract.AppSettingContract;
 import com.weimore.caringhelper.ui.presenter.AppSettingPresenter;
+import com.weimore.util.SPUtil;
 
 /**
  * @author Weimore
  *         2018/12/29.
- *         description:
+ *         description: APP设置界面
  */
 
 public class AppSettingActivity extends BaseActivity<AppSettingContract.Presenter> implements AppSettingContract.View {
 
-
+    private ActivityAppSettingBinding mBinding;
 
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, AppSettingActivity.class));
@@ -31,7 +35,7 @@ public class AppSettingActivity extends BaseActivity<AppSettingContract.Presente
 
     @Override
     public boolean dataBinding() {
-        DataBindingUtil.setContentView(this,R.layout.activity_app_setting);
+        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_app_setting);
         return true;
     }
 
@@ -41,4 +45,10 @@ public class AppSettingActivity extends BaseActivity<AppSettingContract.Presente
         return new AppSettingPresenter(this);
     }
 
+    @Override
+    public void initView() {
+        mBinding.swAutoSms.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SPUtil.put(ConfigKey.AUTO_SMS,isChecked);
+        });
+    }
 }

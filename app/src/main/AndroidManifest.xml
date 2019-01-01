@@ -5,9 +5,14 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -22,24 +27,40 @@
 
 
         <activity android:name="com.weimore.caringhelper.ui.activity.LoginActivity" >
+
+        </activity>
+        <activity android:name=".ui.activity.AppSettingActivity" />
+        <activity android:name=".ui.activity.MessageEditActivity" />
+        <activity android:name=".ui.activity.MapDemoActivity"
+            android:launchMode="singleTask">
+
+        </activity>
+        <activity android:name=".ui.activity.WelcomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.AppSettingActivity" />
+        <activity android:name=".ui.activity.MapSearchActivity" />
 
+        <service android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.weimore.base.fileProvider"
+            android:authorities="com.weimore.caringhelper.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
+
+
+        <meta-data android:name="com.baidu.lbsapi.API_KEY"
+            android:value="YlZDWczN9ZPSpLmOmY4IGRMqKyf4dzM2" />
 
     </application>
 

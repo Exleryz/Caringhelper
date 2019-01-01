@@ -17,23 +17,25 @@ import java.util.List;
 
 public class PermissionUtil {
 
+    private final static int REQ_CODE = 200;
+
     public interface PermissionsCallback {
         void success();
     }
 
-    public static void permissionRequest(final Context context, final int requestCode, final PermissionsCallback callback, final String... permissions) {
-        permissionRequest(context, requestCode, null,callback, permissions);
+    public static void permissionRequest(final Context context, final PermissionsCallback callback, final String... permissions) {
+        permissionRequest(context,null,callback, permissions);
     }
 
-    public static void permissionRequest(final Context context, final int requestCodeData, final String message,final PermissionsCallback callback,
+    public static void permissionRequest(final Context context, final String message,final PermissionsCallback callback,
                                          final String... permissions) {
         AndPermission.with(context)
-                .requestCode(requestCodeData)
+                .requestCode(REQ_CODE)
                 .permission(permissions)
                 .callback(new PermissionListener() {
                     @Override
                     public void onSucceed(int requestCode, @NonNull List<String> grantPermissions) {
-                        if (requestCode == requestCodeData) {
+                        if (requestCode == REQ_CODE) {
                             // 申请权限成功
                             if (AndPermission.hasPermission(context, permissions)) {
                                 callback.success();
@@ -50,7 +52,7 @@ public class PermissionUtil {
 
                     @Override
                     public void onFailed(int requestCode, @NonNull List<String> deniedPermissions) {
-                        if (requestCode == requestCodeData) {
+                        if (requestCode == REQ_CODE) {
                             // 申请权限失败
                             if (AndPermission.hasPermission(context, permissions)) {
                                 callback.success();

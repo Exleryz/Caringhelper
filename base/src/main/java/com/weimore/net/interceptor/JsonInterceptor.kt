@@ -48,11 +48,11 @@ class JsonInterceptor: Interceptor {
         var rBody: String? = null
 
         if (responseBody != null) {
-            val source = responseBody?.source()
+            val source = responseBody.source()
             source?.request(java.lang.Long.MAX_VALUE) // Buffer the entire body.
             val buffer = source?.buffer()
             var charset = UTF8
-            val contentType = responseBody?.contentType()
+            val contentType = responseBody.contentType()
             if (contentType != null) {
                 try {
                     charset = contentType.charset(UTF8)
