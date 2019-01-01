@@ -10,9 +10,24 @@ import lombok.Data;
 @Data
 public class User {
 
+    /**
+     * 用户昵称
+     */
     private String userName;
-    private String phone;
+
+    /**
+     * 用户手机号 登录使用账号
+     */
+    private String phoneNo;
+
+    /**
+     * 用户登录密码
+     */
     private String password;
 
+    /**
+     * 用户注册时间
+     */
+    private String gmtCreate;
 
 }
