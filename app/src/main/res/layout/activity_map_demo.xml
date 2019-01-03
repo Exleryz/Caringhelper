@@ -23,6 +23,8 @@
                 android:layout_height="match_parent" />
 
             <TextView
+                android:maxLines="2"
+                android:maxLength="15"
                 android:id="@+id/tv_origin"
                 android:gravity="center_vertical"
                 android:layout_width="0dp"
@@ -30,6 +32,19 @@
                 android:layout_weight="1"
                 android:textSize="@dimen/T_16"
                 android:text="选择起始点" />
+
+            <TextView
+                android:id="@+id/tv_reloc"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="重置定位"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_theme_radius10"
+                android:layout_width="80dp"
+                android:layout_height="match_parent" />
 
 
         </LinearLayout>
@@ -53,13 +68,27 @@
 
             <TextView
                 android:id="@+id/tv_destination"
+                android:maxLength="15"
                 android:gravity="center_vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:maxLines="2"
                 android:textSize="@dimen/T_16"
                 android:text="选择目的地" />
 
+            <TextView
+                android:id="@+id/tv_sms"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="发送位置"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_theme_radius10"
+                android:layout_width="80dp"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 
@@ -68,7 +97,7 @@
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="10dp" />
 
     </LinearLayout>
 </layout>

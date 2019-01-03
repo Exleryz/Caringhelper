@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.weimore.base.BaseActivity;
+import com.weimore.caringhelper.R;
 import com.weimore.caringhelper.ui.contract.MessageEditContract;
 import com.weimore.caringhelper.ui.presenter.MessageEditPresenter;
 
@@ -22,7 +23,7 @@ public class MessageEditActivity extends BaseActivity<MessageEditContract.Presen
 
     @Override
     public int getLayoutRes() {
-        return 0;
+        return R.layout.activity_message_edit;
     }
 
     @NonNull

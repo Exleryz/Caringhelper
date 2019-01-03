@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
+import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
 import com.baidu.mapapi.search.sug.SuggestionSearchOption;
@@ -19,6 +21,9 @@ import com.weimore.caringhelper.databinding.ActivityMapSearchBinding;
 import com.weimore.util.L;
 import com.weimore.util.ToastUtil;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * @author Weimore
  *         2019/1/1.
@@ -28,13 +33,14 @@ import com.weimore.util.ToastUtil;
 public class MapSearchActivity extends AppCompatActivity {
 
     private ActivityMapSearchBinding mBinding;
+    private PoiSearch mPoiSearch = PoiSearch.newInstance();
     private SuggestionSearch mSuggestionSearch = null;
     private String mCity;
     private SuggestionAdapter mAdapter;
 
-    public static void startActivity(Context context,String city){
-        Intent intent = new Intent(context,MapSearchActivity.class);
-        intent.putExtra("city",city);
+    public static void startActivity(Context context, String city) {
+        Intent intent = new Intent(context, MapSearchActivity.class);
+        intent.putExtra("city", city);
         context.startActivity(intent);
     }
 
@@ -47,9 +53,9 @@ public class MapSearchActivity extends AppCompatActivity {
 
     private void init() {
         mCity = getIntent().getStringExtra("city");
-        if(TextUtils.isEmpty(mCity)){
-           ToastUtil.showShort("错误的城市信息");
-           finish();
+        if (TextUtils.isEmpty(mCity)) {
+            ToastUtil.showShort("错误的城市信息");
+            finish();
         }
         mAdapter = new SuggestionAdapter();
         mBinding.recyclerAddress.setAdapter(mAdapter);
@@ -62,8 +68,8 @@ public class MapSearchActivity extends AppCompatActivity {
                 mAdapter.setData(res.getAllSuggestions());
             }
         });
-        mBinding.etAddress.setOnClickListener(v ->{
-            if(TextUtils.isEmpty(mBinding.etAddress.getText())||"".equals(mBinding.etAddress.getText().toString())){
+        mBinding.tvConfirm.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(mBinding.etAddress.getText()) || "".equals(mBinding.etAddress.getText().toString().trim())) {
                 ToastUtil.showShort("请输入要搜索的地址");
                 return;
             }
@@ -78,29 +84,43 @@ public class MapSearchActivity extends AppCompatActivity {
         mSuggestionSearch.destroy();
     }
 
-    private class SuggestionAdapter extends BaseAdapter<SuggestionResult.SuggestionInfo>{
+    private class SuggestionAdapter extends BaseAdapter<SuggestionResult.SuggestionInfo> {
+
+
         @Override
         protected int getItemLayoutResId() {
-            return 0;
+            return R.layout.item_suggest_location;
         }
 
         @Override
         protected BaseHolder<SuggestionResult.SuggestionInfo> getViewHolder(View view) {
-            return new SuggestionHolder(view,this);
+            return new SuggestionHolder(view, this);
         }
     }
 
-    class SuggestionHolder extends BaseAdapter.BaseHolder<SuggestionResult.SuggestionInfo>{
+    class SuggestionHolder extends BaseAdapter.BaseHolder<SuggestionResult.SuggestionInfo> {
+
+        @BindView(R.id.tv_city)
+        TextView tvCity;
+        @BindView(R.id.tv_district)
+        TextView tvDistrict;
+        @BindView(R.id.tv_address)
+        TextView tvAddress;
+        @BindView(R.id.tv_label)
+        TextView tvLabel;
 
         public SuggestionHolder(View itemView, BaseAdapter<SuggestionResult.SuggestionInfo> adapter) {
             super(itemView, adapter);
+            ButterKnife.bind(this,itemView);
         }
 
         @Override
         protected void bind(SuggestionResult.SuggestionInfo item, int position) {
-
-            itemView.setOnClickListener(v->{
-                MapDemoActivity.startActivity(MapSearchActivity.this,item);
+            tvCity.setText(item.city);
+            tvDistrict.setText(item.district);
+            tvAddress.setText(item.key);
+            itemView.setOnClickListener(v -> {
+                MapDemoActivity.startActivity(MapSearchActivity.this, item);
                 finish();
             });
         }

@@ -11,6 +11,8 @@
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content">
             <EditText
+                android:singleLine="true"
+                android:maxLength="15"
                 android:id="@+id/et_address"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

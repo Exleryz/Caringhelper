@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 
 import com.weimore.base.BaseActivity;
 import com.weimore.caringhelper.R;
+import com.weimore.caringhelper.config.ConfigKey;
 import com.weimore.caringhelper.ui.contract.WelcomeContract;
 import com.weimore.caringhelper.ui.presenter.WelcomePresenter;
 import com.weimore.util.PermissionUtil;
@@ -41,6 +42,7 @@ public class WelcomeActivity extends BaseActivity<WelcomeContract.Presenter> imp
     @Override
     public void initView() {
         super.initView();
+        //先申请必要权限
         PermissionUtil.permissionRequest(this, this::start, Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -49,9 +51,14 @@ public class WelcomeActivity extends BaseActivity<WelcomeContract.Presenter> imp
     }
 
     private void start() {
-        mHandler.postDelayed(() ->
-                startActivity(new Intent(WelcomeActivity.this, MapDemoActivity.class)
-                ), 1000);
+        mHandler.postDelayed(() -> {
+            if (ConfigKey.ifLogin()) {
+                //如果有缓存数据，则无需登录
+                MapDemoActivity.startActivity(WelcomeActivity.this);
+            } else {
+                LoginActivity.startActivity(WelcomeActivity.this);
+            }
+        }, 1000);
     }
 
     @Override

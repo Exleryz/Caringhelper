@@ -43,7 +43,29 @@
             android:layout_height="1px"
             android:background="#55000000"/>
 
+        <TextView
+            android:id="@+id/tv_change_password"
+            android:text="修改密码"
+            android:textColor="@color/white"
+            android:layout_marginLeft="30dp"
+            android:gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/bg_theme_radius10"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
 
+        <TextView
+            android:id="@+id/tv_exit"
+            android:text="退出登录"
+            android:textColor="@color/white"
+            android:layout_marginLeft="30dp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/bg_red_radius10"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
 
     </LinearLayout>
 </layout>

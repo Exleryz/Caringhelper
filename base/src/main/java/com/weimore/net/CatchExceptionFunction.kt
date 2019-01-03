@@ -14,7 +14,7 @@ class CatchExceptionFunction<T> : Function<Result<T>, T>{
 
     @Throws(Exception::class)
     override fun apply(baseResult: Result<T>): T? {
-        if (baseResult.flag==0) {
+        if (baseResult.flag) {
             throw Exception(baseResult.msg)
         } else {
             return baseResult.data;

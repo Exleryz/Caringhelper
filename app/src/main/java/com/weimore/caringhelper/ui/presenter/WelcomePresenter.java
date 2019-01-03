@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.weimore.base.BasePresenter;
 import com.weimore.caringhelper.ui.contract.WelcomeContract;
+import com.weimore.caringhelper.ui.model.WelcomeModel;
 
 /**
  * @author Weimore
@@ -21,7 +22,7 @@ public class WelcomePresenter extends BasePresenter<WelcomeContract.View, Welcom
     @NonNull
     @Override
     public WelcomeContract.Model getModel() {
-        return null;
+        return new WelcomeModel();
     }
 
 }

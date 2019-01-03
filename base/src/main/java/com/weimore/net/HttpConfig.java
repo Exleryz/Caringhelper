@@ -18,7 +18,7 @@ public class HttpConfig {
     private static final int CONNECT_TIME_OUT = 10 * 1000;
     private static final int IO_TIME_OUT = 10 * 1000;
 
-    static OkHttpClient createOkHttpClient(){
+    public static OkHttpClient createOkHttpClient(){
         return new OkHttpClient.Builder()
 //                .addInterceptor(new MoreBaseUrlInterceptor())
                 .addInterceptor(new JsonInterceptor())

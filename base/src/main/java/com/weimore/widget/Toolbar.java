@@ -31,7 +31,7 @@ public class Toolbar extends FrameLayout {
     private View view;
 
     private int mBackgoundRes = R.color.white;
-    private int mLeftImageRes = R.drawable.ic_back_black;
+    private int mLeftImageRes = R.drawable.ic_back_white;
     private String mLeftTitle;
     private String mMainTitle;
     private String mRightTitle;

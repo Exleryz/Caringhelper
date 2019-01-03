@@ -35,7 +35,7 @@ public class AppSettingActivity extends BaseActivity<AppSettingContract.Presente
 
     @Override
     public boolean dataBinding() {
-        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_app_setting);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_app_setting);
         return true;
     }
 
@@ -48,7 +48,13 @@ public class AppSettingActivity extends BaseActivity<AppSettingContract.Presente
     @Override
     public void initView() {
         mBinding.swAutoSms.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SPUtil.put(ConfigKey.AUTO_SMS,isChecked);
+            SPUtil.put(ConfigKey.AUTO_SMS, isChecked);
+        });
+        mBinding.tvChangePassword.setOnClickListener(v -> {
+            ChangePasswordActivity.startActivity(this);
+        });
+        mBinding.tvExit.setOnClickListener(v -> {
+            LoginActivity.startActivity(this);
         });
     }
 }
