@@ -17,6 +17,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
+import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.google.gson.Gson;
 import com.weimore.caringhelper.R;
 import com.weimore.caringhelper.databinding.ActivityMainGroupBinding;
@@ -41,10 +42,11 @@ public class MainGroupActivity extends ActivityGroup {
     private long currentTime;
     public LocationClient mLocationClient = null;
     private MyLocationListener myListener = new MyLocationListener();
-    private static String locationStr = "";
-    private static String destinationStr = "";
-    private BDLocation mCurLocation;
+    private static String smsStr = "";
+    private static BDLocation mCurLocation;
+    private static SuggestionResult.SuggestionInfo mSuggestInfo;
     private List<LocationCallback> callbackList = new ArrayList<>();
+    public static MainGroupActivity instance;
 
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, MainGroupActivity.class));
@@ -53,6 +55,7 @@ public class MainGroupActivity extends ActivityGroup {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main_group);
         initView();
         initLocation();
@@ -94,7 +97,6 @@ public class MainGroupActivity extends ActivityGroup {
             default:
                 break;
         }
-        mLocationClient.restart();
     }
 
     private void initView() {
@@ -152,26 +154,34 @@ public class MainGroupActivity extends ActivityGroup {
         mLocationClient.stop();
     }
 
-    public static void setLocationStr(BDLocation location) {
-        locationStr = SmsUtils.addressContent(location.getAddrStr() + "," + location.getLocationDescribe());
+    public static void setLocation(BDLocation location) {
+        mCurLocation = location;
+        L.e(getAddress());
     }
 
-    public static void setDestinationStr(String addr) {
-        destinationStr = addr;
+    public static void setDestination(SuggestionResult.SuggestionInfo suggestionInfo) {
+        mSuggestInfo = suggestionInfo;
+        L.e(getAddress());
     }
 
     public static String getAddress() {
-        return TextUtils.isEmpty(locationStr) ? "" : locationStr + (TextUtils.isEmpty(destinationStr) ? "" : destinationStr);
+        String address = "";
+        if(mCurLocation!=null){
+            address = SmsUtils.addressContent(mCurLocation);
+            if(mSuggestInfo!=null){
+                address = SmsUtils.addressContent(mCurLocation,mSuggestInfo);
+            }
+            return address;
+        }else {
+            return "";
+        }
     }
 
-    public void getCurrentLocation(@NotNull LocationCallback callback) {
-        if (mCurLocation != null) {
-            callback.callback(mCurLocation);
-        } else {
-            if (!callbackList.contains(callback)) {
-                callbackList.add(callback);
-            }
+    public void getLocation(@NotNull LocationCallback callback) {
+        if (!callbackList.contains(callback)) {
+            callbackList.add(callback);
         }
+        mLocationClient.restart();
     }
 
     private class MyLocationListener extends BDAbstractLocationListener {
@@ -184,14 +194,13 @@ public class MainGroupActivity extends ActivityGroup {
             int errorCode = location.getLocType(); //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
             String locationDescribe = location.getLocationDescribe();    //获取位置描述信息
             List<Poi> poiList = location.getPoiList(); //获取周边POI信息
-            mCurLocation = location;
+            setLocation(location);
             if (callbackList != null) {
                 for (LocationCallback locationCallback : callbackList) {
                     locationCallback.callback(mCurLocation);
                 }
                 callbackList.clear();
             }
-            setLocationStr(location);
             L.d(locationDescribe);
             L.d(new Gson().toJson(poiList));
             if (mLocationClient != null) {

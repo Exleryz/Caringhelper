@@ -79,7 +79,7 @@
                 android:textSize="@dimen/T_14" />
 
             <TextView
-                android:id="@+id/tv_sms"
+                android:id="@+id/tv_clear"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
@@ -88,7 +88,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/bg_theme_radius10"
                 android:gravity="center"
-                android:text="确定"
+                android:text="清除目的地"
                 android:textColor="@color/white" />
 
         </LinearLayout>

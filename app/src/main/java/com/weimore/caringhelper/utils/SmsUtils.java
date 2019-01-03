@@ -6,6 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsManager;
 
+import com.baidu.location.BDLocation;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.inner.Point;
+import com.baidu.mapapi.search.sug.SuggestionResult;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.weimore.util.PermissionUtil;
 import com.weimore.util.ToastUtil;
 
@@ -41,10 +46,16 @@ public class SmsUtils {
 
     }
 
-    public static String addressContent(String address){
-        return "我当前位置处于" + address + "";
+    public static String addressContent(BDLocation location){
+        return "我当前位置处于" + location.getCity()+location.getDistrict()+location.getStreet() + "," + location.getLocationDescribe();
     }
 
+    public static String addressContent(BDLocation location, SuggestionResult.SuggestionInfo suggestionInfo){
+        LatLng point1 = new LatLng(location.getLatitude(),location.getLongitude());
+        LatLng point2 = suggestionInfo.getPt();
+        String distance = String.format("%.2f", DistanceUtil.getDistance(point1,point2)/1000) + " km";
+        return addressContent(location) + "。" + "距离目的地:" + suggestionInfo.city +suggestionInfo.district + suggestionInfo.key + "还有约"+ distance + "。";
+    }
 
 
 }

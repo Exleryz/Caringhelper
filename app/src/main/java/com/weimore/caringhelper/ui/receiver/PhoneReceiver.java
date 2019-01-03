@@ -64,9 +64,14 @@ public class PhoneReceiver extends BroadcastReceiver {
                 case TelephonyManager.CALL_STATE_RINGING:
                     L.d("响铃:来电号码" + incomingNumber);
                     Contact contact = ContactBeanHelper.queryOneByPhone(MyApplication.Companion.getContext(), incomingNumber);
-                    if (contact != null && !TextUtils.isEmpty(MainGroupActivity.getAddress()) && SPUtil.getBoolean(ConfigKey.AUTO_SMS)) {
-                        SmsUtils.sendMessage(MyApplication.Companion.getContext(),incomingNumber,MainGroupActivity.getAddress());
+                    if(contact==null || !SPUtil.getBoolean(ConfigKey.AUTO_SMS)){
+                        return;
                     }
+                    MainGroupActivity.instance.getLocation(location -> {
+                        if (!TextUtils.isEmpty(MainGroupActivity.getAddress())) {
+                            SmsUtils.sendMessage(MyApplication.Companion.getContext(),incomingNumber,MainGroupActivity.getAddress());
+                        }
+                    });
                     break;
                 default:
                     break;

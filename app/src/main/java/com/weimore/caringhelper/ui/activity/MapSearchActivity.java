@@ -142,7 +142,9 @@ public class MapSearchActivity extends AppCompatActivity {
             tvDistrict.setText(item.district);
             tvAddress.setText(item.key);
             itemView.setOnClickListener(v -> {
-                MapActivity.startActivity(MapSearchActivity.this, item);
+                Intent intent = new Intent();
+                intent.putExtra("suggestion",item);
+                setResult(RESULT_OK,intent);
                 finish();
             });
         }
