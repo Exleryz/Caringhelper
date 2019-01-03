@@ -11,6 +11,10 @@ import lombok.Data;
 public class User {
 
     /**
+     * 用户Id
+     */
+    private String id;
+    /**
      * 用户昵称
      */
     private String userName;

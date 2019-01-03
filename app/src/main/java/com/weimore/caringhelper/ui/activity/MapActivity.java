@@ -4,15 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
-import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.location.Poi;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -31,17 +28,10 @@ import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.baidu.mapapi.search.sug.SuggestionResult;
-import com.baidu.mapapi.search.sug.SuggestionSearch;
-import com.baidu.mapapi.search.sug.SuggestionSearchOption;
-import com.google.gson.Gson;
 import com.weimore.caringhelper.R;
-import com.weimore.caringhelper.databinding.ActivityMapDemoBinding;
-import com.weimore.caringhelper.ui.overlayutil.DrivingRouteOverlay;
+import com.weimore.caringhelper.databinding.ActivityMapBinding;
 import com.weimore.caringhelper.utils.SmsUtils;
-import com.weimore.util.L;
 import com.weimore.util.ToastUtil;
-
-import java.util.List;
 
 /**
  * @author Weimore
@@ -49,12 +39,11 @@ import java.util.List;
  *         description:
  */
 
-public class MapDemoActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity {
 
-    private ActivityMapDemoBinding mBinding;
+    private ActivityMapBinding mBinding;
     private BaiduMap mBaiduMap;
-    public LocationClient mLocationClient = null;
-    private MyLocationListener myListener = new MyLocationListener();
+
     private String mCity;
     private int choosePos = 0;
     private RoutePlanSearch mSearch = null;
@@ -63,18 +52,18 @@ public class MapDemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map_demo);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map);
         initView();
     }
 
     public static void startActivity(Context context, SuggestionResult.SuggestionInfo suggestionInfo) {
-        Intent intent = new Intent(context, MapDemoActivity.class);
+        Intent intent = new Intent(context, MapActivity.class);
         intent.putExtra("suggestionInfo", suggestionInfo);
         context.startActivity(intent);
     }
 
     public static void startActivity(Context context) {
-        Intent intent = new Intent(context, MapDemoActivity.class);
+        Intent intent = new Intent(context, MapActivity.class);
         context.startActivity(intent);
     }
 
@@ -101,12 +90,6 @@ public class MapDemoActivity extends AppCompatActivity {
 
     private void initView() {
         initMap();
-        mBinding.tvOrigin.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(mCity)) {
-                choosePos = 0;
-                MapSearchActivity.startActivity(this, mCity);
-            }
-        });
         mBinding.tvDestination.setOnClickListener(v -> {
             if (!TextUtils.isEmpty(mCity)) {
                 choosePos = 1;
@@ -114,7 +97,10 @@ public class MapDemoActivity extends AppCompatActivity {
             }
         });
         mBinding.tvReloc.setOnClickListener(v -> {
-            mLocationClient.restart();
+            MainGroupActivity parent = (MainGroupActivity) getParent();
+            if (parent != null) {
+                parent.getCurrentLocation(this::updateMapLocation);
+            }
             mBinding.tvDestination.setText("");
         });
         mBinding.tvSms.setOnClickListener(v -> {
@@ -124,14 +110,22 @@ public class MapDemoActivity extends AppCompatActivity {
             if (TextUtils.isEmpty(mBinding.tvDestination.getText()) || "".equals(mBinding.tvDestination.getText().toString().trim())) {
                 ToastUtil.showShort("请选择目的地");
             }
-            if(mCurLocation==null){
+            if (mCurLocation == null) {
                 ToastUtil.showShort("定位失败，请确认是否开启网络或GPS,并重新定位");
                 return;
             }
-            SmsUtils.sendMessage(this,"18255039301",
-                    SmsUtils.addressContent(mCurLocation.getAddrStr()+"," + mCurLocation.getLocationDescribe()));
+            SmsUtils.sendMessage(this, "18255039301",
+                    SmsUtils.addressContent(mCurLocation.getAddrStr() + "," + mCurLocation.getLocationDescribe()));
         });
+        mBinding.map.postDelayed(() -> {
+            MainGroupActivity parent = (MainGroupActivity) getParent();
+            if (parent != null) {
+                parent.getCurrentLocation(MapActivity.this::updateMapLocation);
+            }
+        },500);
     }
+
+
 
     /**
      * 初始化地图配置
@@ -145,23 +139,7 @@ public class MapDemoActivity extends AppCompatActivity {
         MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, currentMarker);
         mBaiduMap.setMyLocationConfiguration(config);
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(18));
-        mLocationClient = new LocationClient(getApplicationContext());
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
-        option.setScanSpan(0);
-        option.setOpenGps(true);
-        option.setLocationNotify(true);
-        option.setIgnoreKillProcess(false);
-        option.SetIgnoreCacheException(false);
-        option.setWifiCacheTimeOut(5 * 60 * 1000);
-        option.setEnableSimulateGps(false);
-        option.setIsNeedAddress(true);
-        option.setIsNeedLocationDescribe(true);
-        option.setIsNeedLocationPoiList(true);
-        mLocationClient.setLocOption(option);
-        mLocationClient.registerLocationListener(myListener);
-        mLocationClient.start();
+
 
         mSearch = RoutePlanSearch.newInstance();
         mSearch.setOnGetRoutePlanResultListener(new OnGetRoutePlanResultListener() {
@@ -203,7 +181,6 @@ public class MapDemoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mBaiduMap.setMyLocationEnabled(true);
-//        mLocationClient.start();
     }
 
     @Override
@@ -211,24 +188,6 @@ public class MapDemoActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private class MyLocationListener extends BDAbstractLocationListener {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            String province = location.getProvince();    //获取省份
-            String city = location.getCity();    //获取城市
-            String district = location.getDistrict();    //获取区县
-            String street = location.getStreet();    //获取街道信息
-            int errorCode = location.getLocType(); //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
-            String locationDescribe = location.getLocationDescribe();    //获取位置描述信息
-            List<Poi> poiList = location.getPoiList(); //获取周边POI信息
-            updateMapLocation(location);
-            L.d(locationDescribe);
-            L.d(new Gson().toJson(poiList));
-            if (mLocationClient != null) {
-                mLocationClient.stop();
-            }
-        }
-    }
 
     private void updateMapLocation(BDLocation location) {
         MyLocationData locData = new MyLocationData.Builder()
@@ -238,7 +197,7 @@ public class MapDemoActivity extends AppCompatActivity {
                 .longitude(location.getLongitude()).build();
         mCurLocation = location;
         mCity = location.getCity();
-        mBinding.tvOrigin.setText(location.getStreet());
+        mBinding.tvOrigin.setText(String.format("%s%s%s", location.getCity(), location.getDistrict(), location.getStreet()));
         if (mBaiduMap != null) {
             mBaiduMap.setMyLocationData(locData);
         }
@@ -271,7 +230,6 @@ public class MapDemoActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLocationClient.stop();
         mBaiduMap.setMyLocationEnabled(false);
         mBinding.map.onDestroy();
         mSearch.destroy();

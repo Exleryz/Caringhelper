@@ -43,13 +43,16 @@ public class LoginPresenter extends BasePresenter<LoginContract.View, LoginContr
             @Override
             public void callback(User data) {
                 if(isNotDetach()){
-                    ((LoginActivity)getMView()).loginSuccess(data);
+                    getMView().dismissLoading();
+                    getMView().loginSuccess(data);
                 }
             }
 
             @Override
             public void error(@org.jetbrains.annotations.Nullable String message) {
-
+                if(isNotDetach()){
+                    getMView().dismissLoading();
+                }
             }
         });
     }

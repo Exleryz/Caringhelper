@@ -126,10 +126,10 @@ public class LoginActivity extends BaseActivity<LoginContract.Presenter> impleme
 
     @Override
     public void loginSuccess(User user) {
-        dismissLoading();
+        ConfigKey.setUserId(user.getId());
         ConfigKey.setPhoneNumber(user.getPhoneNo());
         ConfigKey.setUserName(user.getUserName());
-        MapDemoActivity.startActivity(this);
+        MainGroupActivity.startActivity(this);
         finish();
     }
 

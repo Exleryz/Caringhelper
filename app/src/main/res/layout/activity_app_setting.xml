@@ -8,9 +8,10 @@
 
         <com.weimore.widget.Toolbar
             android:id="@+id/toolbar"
+            app:toolbar_background="@color/colorTheme"
             app:toolbar_title="设置"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="45dp"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -21,7 +22,7 @@
 
             <TextView
                 android:gravity="center_vertical"
-                android:text="自动发送位置短信"
+                android:text="来电自动发送短信"
                 android:textColor="@color/black"
                 android:layout_marginLeft="20dp"
                 android:textSize="@dimen/T_14"

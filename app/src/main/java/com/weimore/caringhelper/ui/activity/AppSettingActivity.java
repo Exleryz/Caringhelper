@@ -47,6 +47,7 @@ public class AppSettingActivity extends BaseActivity<AppSettingContract.Presente
 
     @Override
     public void initView() {
+        mBinding.toolbar.hideLeftImage();
         mBinding.swAutoSms.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SPUtil.put(ConfigKey.AUTO_SMS, isChecked);
         });

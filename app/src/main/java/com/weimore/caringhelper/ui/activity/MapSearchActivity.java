@@ -6,7 +6,9 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 
@@ -68,6 +70,26 @@ public class MapSearchActivity extends AppCompatActivity {
                 mAdapter.setData(res.getAllSuggestions());
             }
         });
+        mBinding.etAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(mBinding.etAddress.getText()) || "".equals(mBinding.etAddress.getText().toString().trim())) {
+                    return;
+                }
+                String keyword = mBinding.etAddress.getText().toString();
+                mSuggestionSearch.requestSuggestion(new SuggestionSearchOption().city(mCity).keyword(keyword));
+            }
+        });
         mBinding.tvConfirm.setOnClickListener(v -> {
             if (TextUtils.isEmpty(mBinding.etAddress.getText()) || "".equals(mBinding.etAddress.getText().toString().trim())) {
                 ToastUtil.showShort("请输入要搜索的地址");
@@ -120,7 +142,7 @@ public class MapSearchActivity extends AppCompatActivity {
             tvDistrict.setText(item.district);
             tvAddress.setText(item.key);
             itemView.setOnClickListener(v -> {
-                MapDemoActivity.startActivity(MapSearchActivity.this, item);
+                MapActivity.startActivity(MapSearchActivity.this, item);
                 finish();
             });
         }

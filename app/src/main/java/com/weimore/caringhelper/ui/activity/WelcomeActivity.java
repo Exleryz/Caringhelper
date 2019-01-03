@@ -54,10 +54,11 @@ public class WelcomeActivity extends BaseActivity<WelcomeContract.Presenter> imp
         mHandler.postDelayed(() -> {
             if (ConfigKey.ifLogin()) {
                 //如果有缓存数据，则无需登录
-                MapDemoActivity.startActivity(WelcomeActivity.this);
+                MainGroupActivity.startActivity(WelcomeActivity.this);
             } else {
                 LoginActivity.startActivity(WelcomeActivity.this);
             }
+            finish();
         }, 1000);
     }
 

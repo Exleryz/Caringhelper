@@ -1,7 +1,6 @@
 package com.weimore.caringhelper.net;
 
 import android.os.Looper;
-import android.os.MessageQueue;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -73,9 +72,7 @@ public class OkHttpUtil {
                                 ToastUtil.showShort(result.getMsg());
                                 callback.error(result.getMsg());
                             }
-                        } catch (NoSuchMethodException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
+                        } catch (NoSuchMethodException | IOException e) {
                             e.printStackTrace();
                         }
                         return false;

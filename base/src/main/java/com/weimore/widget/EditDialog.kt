@@ -11,7 +11,12 @@ import kotlinx.android.synthetic.main.dialog_edittext.*
 
 /**
  * @author Weimore
-2018/11/22.
+2019/1/3.
+description:
+ */
+/**
+ * @author Weimore
+2019/1/3.
 description:
  */
 class EditDialog(context: Context) : AppCompatDialog(context, R.style.WhiteBackGroundDialog) {
@@ -46,10 +51,6 @@ class EditDialog(context: Context) : AppCompatDialog(context, R.style.WhiteBackG
         tv_cancel.text = text
     }
 
-    fun setHint(content: String) {
-        tv_edit.hint = content
-    }
-
     fun setTitleText(title: String) = {
         im_code.visibility = View.VISIBLE
         im_code.text = title
@@ -59,8 +60,24 @@ class EditDialog(context: Context) : AppCompatDialog(context, R.style.WhiteBackG
         im_code.visibility = View.GONE
     }
 
-    fun getText():String{
-        return tv_edit.text.toString()
+    fun getNameText(): String {
+        return et_name.text.toString()
+    }
+
+    fun setNameAndPhone(name:String, phone:String){
+        et_name.setText(name)
+        et_phone.setText(phone)
+    }
+
+
+    override fun dismiss() {
+        super.dismiss()
+        et_name.text.clear()
+        et_phone.text.clear()
+    }
+
+    fun getPhoneText():String{
+        return et_phone.text.toString()
     }
 
 }

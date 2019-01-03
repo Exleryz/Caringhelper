@@ -16,6 +16,8 @@ public class ConfigKey {
 
     public interface UserInfo{
 
+        String USER_ID = "user_id";
+
         String USER_NAME = "user_name";
 
         String PHONE = "phone";
@@ -24,6 +26,14 @@ public class ConfigKey {
 
     public static boolean ifLogin(){
         return !TextUtils.isEmpty(getPhoneNumber());
+    }
+
+    public static void setUserId(String userId){
+        SPUtil.put(UserInfo.USER_ID,userId);
+    }
+
+    public static String getUserId(){
+        return SPUtil.getString(UserInfo.USER_ID);
     }
 
     public static void setPhoneNumber(String phoneNumber){
@@ -43,6 +53,7 @@ public class ConfigKey {
     }
 
     public static void clearInfo(){
+        setUserId("");
         setUserName("");
         setPhoneNumber("");
     }

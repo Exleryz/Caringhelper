@@ -50,7 +50,6 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View, Regi
             @Override
             public void error(@org.jetbrains.annotations.Nullable String message) {
                 if(isNotDetach()){
-                    getMView().dismissLoading();
                     getMView().showToast(message);
                 }
             }

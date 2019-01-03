@@ -8,7 +8,7 @@ package com.weimore.caringhelper.config;
 
 public class ConstantUrl {
 
-    public static final String BASE_URL = "http://47.106.10.108:8080/";
+    public static final String BASE_URL = "http://47.106.10.108:8080/user/";
 
     public static final String REGISTER = BASE_URL + "register";
 

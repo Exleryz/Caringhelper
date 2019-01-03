@@ -42,7 +42,6 @@ public class ChangePasswordPresenter extends BasePresenter<ChangePasswordContrac
             @Override
             public void callback(User data) {
                 if(isNotDetach()){
-                    getMView().showToast("登录成功");
                     getMView().reLoginSuccess();
                 }
             }
@@ -61,9 +60,9 @@ public class ChangePasswordPresenter extends BasePresenter<ChangePasswordContrac
         Map<String,Object> map = new HashMap<>();
         map.put("phoneNo",phone);
         map.put("password",password);
-        OkHttpUtil.get(ConstantUrl.UPDATE_PASSWORD, map, String.class,new BaseCallback<String>() {
+        OkHttpUtil.get(ConstantUrl.UPDATE_PASSWORD, map, User.class,new BaseCallback<User>() {
             @Override
-            public void callback(String data) {
+            public void callback(User data) {
                 if(isNotDetach()){
                     getMView().dismissLoading();
                     getMView().showToast("密码修改成功");
