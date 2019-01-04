@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ import com.weimore.caringhelper.databinding.ActivityContactBinding;
 import com.weimore.caringhelper.entity.Contact;
 import com.weimore.caringhelper.ui.contract.ContactContract;
 import com.weimore.caringhelper.ui.presenter.ContactPresenter;
+import com.weimore.caringhelper.utils.callback.ExcelUtils;
+import com.weimore.caringhelper.utils.callback.MyCallback;
 import com.weimore.config.SmartRefreshConfig;
 import com.weimore.util.PermissionUtil;
 import com.weimore.widget.DoubleDialog;
@@ -100,7 +103,7 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
                     showToast("请输入号码");
                     return;
                 }
-                Contact contact = new Contact(mEditDialog.getPhoneText(),mEditDialog.getNameText());
+                Contact contact = new Contact(mEditDialog.getNameText(),mEditDialog.getPhoneText());
                 if(ContactBeanHelper.queryOneByPhone(this,contact.getPhoneNo())!=null){
                     showToast("该号码已在白名单中");
                     return;
@@ -114,7 +117,7 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
         });
 
         mBinding.tvExcel.setOnClickListener(v->{
-
+            ExcelUtils.fileChoose(ContactActivity.this);
         });
     }
 
@@ -183,9 +186,15 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
                             showToast("请输入号码");
                             return;
                         }
-                        Contact contact = new Contact(mEditDialog.getPhoneText(),mEditDialog.getNameText());
-                        contact.setId(item.getId());
-                        ContactBeanHelper.updateData(MyApplication.Companion.getContext(),contact);
+                        Contact contact = new Contact(mEditDialog.getNameText(),mEditDialog.getPhoneText());
+                        Contact otherContact = ContactBeanHelper.queryOneByPhone(MyApplication.Companion.getContext(),contact.getPhoneNo());
+                        if(otherContact!=null && !otherContact.getId().equals(item.getId())){
+                            showToast("该号码已在白名单中");
+                            return;
+                        }else {
+                            contact.setId(item.getId());
+                            ContactBeanHelper.updateData(MyApplication.Companion.getContext(),contact);
+                        }
                         mAdapter.changeItem(position,contact);
                         mEditDialog.dismiss();
                         showToast("修改成功");
@@ -204,4 +213,19 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ExcelUtils.onActivityResult(this, requestCode, resultCode, data, new MyCallback<Boolean>() {
+            @Override
+            public void callback(Boolean aBoolean) {
+                if(aBoolean){
+                    showToast("数据导入成功");
+                    getMPresenter().getContactInfo();
+                }else {
+                    showToast("数据导入失败");
+                }
+            }
+        });
+    }
 }

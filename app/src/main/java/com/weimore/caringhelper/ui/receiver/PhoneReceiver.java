@@ -69,6 +69,7 @@ public class PhoneReceiver extends BroadcastReceiver {
                     }
                     MainGroupActivity.instance.getLocation(location -> {
                         if (!TextUtils.isEmpty(MainGroupActivity.getAddress())) {
+                            L.d("发送短信");
                             SmsUtils.sendMessage(MyApplication.Companion.getContext(),incomingNumber,MainGroupActivity.getAddress());
                         }
                     });

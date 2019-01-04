@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -167,9 +166,9 @@ public class MainGroupActivity extends ActivityGroup {
     public static String getAddress() {
         String address = "";
         if(mCurLocation!=null){
-            address = SmsUtils.addressContent(mCurLocation);
+            address = SmsUtils.locationModeA(mCurLocation);
             if(mSuggestInfo!=null){
-                address = SmsUtils.addressContent(mCurLocation,mSuggestInfo);
+                address = SmsUtils.locationModeB(mCurLocation,mSuggestInfo);
             }
             return address;
         }else {

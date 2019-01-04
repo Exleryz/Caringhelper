@@ -1,17 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <com.weimore.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            app:toolbar_background="@color/colorTheme"
             app:toolbar_title="短信编辑" />
 
-        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="注意事项：\n\n目前短信中可提供的数据有：\n1.当前位置(编辑时用A代替)\n2.目的地位置(编辑时用B代替)\n3.当前位置距目的地距离(短信中用C代替)\n\n由于未设置目的地时，短信中只会包含当前位置，故短信需设置两种格式，第一种只包含当前位置，第二种出当前位置信息外，还包含描述目的地和距离信息"
+            android:textSize="@dimen/T_12" />
 
-    </android.support.constraint.ConstraintLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:text="未设置目的地："
+            android:textColor="@color/black"
+            android:textSize="@dimen/T_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="10dp"
+            android:background="#55000000" />
+
+        <EditText
+            android:id="@+id/et_mode_a"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:gravity="start"
+            android:hint="注意：使用A代替当前位置"
+            android:padding="10dp"
+            android:textSize="@dimen/T_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#55000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:text="已设置目的地："
+            android:textColor="@color/black"
+            android:textSize="@dimen/T_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="10dp"
+            android:background="#55000000" />
+
+        <EditText
+            android:id="@+id/et_mode_b"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:gravity="start"
+            android:hint="注意：使用A代替当前位置,B代表目的地，C代表距离"
+            android:padding="10dp"
+            android:textSize="@dimen/T_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#55000000" />
+
+        <TextView
+            android:id="@+id/tv_save"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_theme_radius10"
+            android:gravity="center"
+            android:text="保存"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 </layout>

@@ -53,5 +53,5 @@ ext {
     lombok_version = "1.16.18"
     javax_annotation_version = "10.0-b28"
     greendao_version = "3.2.2"
-
+    jxl_version = "2.6.12.1"
 }

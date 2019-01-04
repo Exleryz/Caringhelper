@@ -65,6 +65,7 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
     implementation "org.greenrobot:greendao:$greendao_version"
     implementation "org.greenrobot:greendao-generator:$greendao_version"
+    implementation "com.hynnet:jxl:$jxl_version"
 
     implementation files('libs/BaiduLBS_Android.jar')
     implementation files('libs/component_common_sdk_1.0.0.jar')

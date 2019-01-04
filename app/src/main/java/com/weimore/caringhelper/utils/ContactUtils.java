@@ -37,7 +37,7 @@ public class ContactUtils {
                     String name = cursor.getString(nameFieldColumnIndex);
                     for (int m = 1; m <= numberFieldColumnIndex; m++) {
                         String number = cursor.getString(m).trim();
-                        Contact model = new Contact(number,name);
+                        Contact model = new Contact(name,number);
                         Log.e("test", "name:" + name + "number:" + number);
                         contactModelList.add(model);
                     }

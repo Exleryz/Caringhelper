@@ -129,6 +129,7 @@ public class LoginActivity extends BaseActivity<LoginContract.Presenter> impleme
         ConfigKey.setUserId(user.getId());
         ConfigKey.setPhoneNumber(user.getPhoneNo());
         ConfigKey.setUserName(user.getUserName());
+        ConfigKey.setCreateTime(user.getGmtCreate());
         MainGroupActivity.startActivity(this);
         finish();
     }

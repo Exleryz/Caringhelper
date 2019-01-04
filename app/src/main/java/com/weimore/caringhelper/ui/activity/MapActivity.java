@@ -17,6 +17,7 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.route.BikingRouteResult;
+import com.baidu.mapapi.search.route.DrivingRouteLine;
 import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
 import com.baidu.mapapi.search.route.DrivingRouteResult;
 import com.baidu.mapapi.search.route.IndoorRouteResult;
@@ -29,7 +30,9 @@ import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.weimore.caringhelper.R;
 import com.weimore.caringhelper.databinding.ActivityMapBinding;
+import com.weimore.caringhelper.ui.overlayutil.DrivingRouteOverlay;
 import com.weimore.caringhelper.utils.SmsUtils;
+import com.weimore.util.L;
 import com.weimore.util.ToastUtil;
 
 /**
@@ -56,40 +59,13 @@ public class MapActivity extends AppCompatActivity {
         initView();
     }
 
-    public static void startActivity(Context context, SuggestionResult.SuggestionInfo suggestionInfo) {
-        Intent intent = new Intent(context, MapActivity.class);
-        intent.putExtra("suggestionInfo", suggestionInfo);
-        context.startActivity(intent);
-    }
-
-    public static void startActivity(Context context) {
-        Intent intent = new Intent(context, MapActivity.class);
-        context.startActivity(intent);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        SuggestionResult.SuggestionInfo si = intent.getParcelableExtra("suggestionInfo");
-        if (si != null) {
-            mBinding.tvDestination.setText(si.key);
-        }
-        if (!TextUtils.isEmpty(mBinding.tvOrigin.getText()) && !TextUtils.isEmpty(mBinding.tvDestination.getText())) {
-            PlanNode stNode = PlanNode.withCityNameAndPlaceName(mCity, mBinding.tvOrigin.getText().toString());
-            PlanNode enNode = PlanNode.withCityNameAndPlaceName(mCity, mBinding.tvDestination.getText().toString());
-            mSearch.drivingSearch((new DrivingRoutePlanOption())
-                    .from(stNode)
-                    .to(enNode));
-        }
-    }
-
     private void initView() {
         initMap();
         mBinding.tvDestination.setOnClickListener(v -> {
             if (!TextUtils.isEmpty(mCity)) {
-                Intent intent = new Intent(this,MapSearchActivity.class);
-                intent.putExtra("city",mCity);
-                startActivityForResult(intent,CHOOSE_DESTINATION);
+                Intent intent = new Intent(this, MapSearchActivity.class);
+                intent.putExtra("city", mCity);
+                startActivityForResult(intent, CHOOSE_DESTINATION);
             }
         });
         mBinding.tvReloc.setOnClickListener(v -> {
@@ -97,7 +73,7 @@ public class MapActivity extends AppCompatActivity {
             if (parent != null) {
                 parent.getLocation(location -> {
                     mCurLocation = location;
-                    updateMapLocation(mCurLocation,mSuggestionInfo);
+                    updateMapLocation(mCurLocation, mSuggestionInfo);
                 });
             }
         });
@@ -105,16 +81,15 @@ public class MapActivity extends AppCompatActivity {
             mSuggestionInfo = null;
             mBinding.tvDestination.setText("");
             MainGroupActivity.setDestination(null);
-            updateMapLocation(mCurLocation,mSuggestionInfo);
+            updateMapLocation(mCurLocation, mSuggestionInfo);
         });
         mBinding.map.postDelayed(() -> {
             MainGroupActivity parent = (MainGroupActivity) getParent();
             if (parent != null) {
                 parent.getLocation(MapActivity.this::updateMapLocation);
             }
-        },500);
+        }, 500);
     }
-
 
 
     /**
@@ -160,14 +135,23 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public void onGetDrivingRouteResult(DrivingRouteResult result) {
                 //获取驾车线路规划结果
-//                DrivingRouteOverlay overlay = new DrivingRouteOverlay(mBaiduMap);
-//                overlay.setData(result.getRouteLines().get(0));
+                if (result.getRouteLines() == null) {
+                    L.d("无路线");
+                    ToastUtil.showShort("未搜索到合适的路线，请尝试选择目的地周围的其它地址来进行路线搜索");
+                    return;
+                }
+                L.d("绘制导航路线");
+//                for (DrivingRouteLine drivingRouteLine : result.getRouteLines()) {
+                DrivingRouteOverlay overlay = new DrivingRouteOverlay(mBaiduMap);
+                overlay.setData(result.getRouteLines().get(0));
+                overlay.addToMap();
+//                }
             }
         });
     }
 
     private void updateMapLocation(BDLocation location) {
-        updateMapLocation(location,null);
+        updateMapLocation(location, null);
     }
 
     private void updateMapLocation(BDLocation location, SuggestionResult.SuggestionInfo suggestionInfo) {
@@ -179,12 +163,24 @@ public class MapActivity extends AppCompatActivity {
                 .longitude(location.getLongitude()).build();
         mCurLocation = location;
         mCity = location.getCity();
-        mBinding.tvOrigin.setText(String.format("%s%s%s", location.getCity(), location.getDistrict(), location.getStreet()));
+        mBinding.tvOrigin.setText(String.format("%s%s%s", location.getCity(), location.getDistrict(), location.getStreet()+ mCurLocation.getPoiList().get(0).getName()));
         if (mBaiduMap != null) {
             mBaiduMap.setMyLocationData(locData);
         }
-        if(suggestionInfo!=null){
-
+        if (suggestionInfo != null) {
+            PlanNode stNode = PlanNode.withCityNameAndPlaceName(mCity, mCurLocation.getStreet() + mCurLocation.getPoiList().get(0).getName());
+            PlanNode enNode = PlanNode.withCityNameAndPlaceName(mCity, mSuggestionInfo.key);
+            mSearch.drivingSearch((new DrivingRoutePlanOption())
+                    .from(stNode)
+                    .to(enNode));
+            Double distance = SmsUtils.getDistance(location, suggestionInfo);
+            if (distance > 1 && distance < 10) {
+                mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(15));
+            }else {
+                mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
+            }
+        } else {
+            mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(18));
         }
     }
 
@@ -192,6 +188,13 @@ public class MapActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mBaiduMap.setMyLocationEnabled(true);
+        MainGroupActivity parent = (MainGroupActivity) getParent();
+        if (parent != null && mCurLocation == null) {
+            parent.getLocation(location -> {
+                mCurLocation = location;
+                updateMapLocation(mCurLocation, mSuggestionInfo);
+            });
+        }
     }
 
     @Override
@@ -234,15 +237,15 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK && requestCode == CHOOSE_DESTINATION){
+        if (resultCode == RESULT_OK && requestCode == CHOOSE_DESTINATION) {
             //选择目的地返回
-            if(data!=null){
+            if (data != null) {
                 mSuggestionInfo = data.getParcelableExtra("suggestion");
-                if(mSuggestionInfo!=null){
+                if (mSuggestionInfo != null) {
                     MainGroupActivity.setDestination(mSuggestionInfo);
                     mBinding.tvDestination.setText(
                             String.format("%s%s%s", mSuggestionInfo.city, mSuggestionInfo.district, mSuggestionInfo.key));
-                    updateMapLocation(mCurLocation,mSuggestionInfo);
+                    updateMapLocation(mCurLocation, mSuggestionInfo);
                 }
             }
         }

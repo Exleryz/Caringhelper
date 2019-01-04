@@ -20,28 +20,28 @@ public class Contact {
 
     @Id(autoincrement = true)
     Long id;
-
+    String name;
     @Unique
     @Property(nameInDb = "phone_num")
     String phoneNo;
 
-    String name;
-
-    public Contact(String phoneNo, String name) {
-        this.phoneNo = phoneNo;
+    public Contact(String name,String phoneNo) {
         this.name = name;
+        this.phoneNo = phoneNo;
     }
 
     @Generated(hash = 672515148)
     public Contact() {
     }
 
-    @Generated(hash = 1378704487)
-    public Contact(Long id, String phoneNo, String name) {
+    @Generated(hash = 549330368)
+    public Contact(Long id, String name, String phoneNo) {
         this.id = id;
-        this.phoneNo = phoneNo;
         this.name = name;
+        this.phoneNo = phoneNo;
     }
+
+   
 
     public String getPhoneNo() {
         return this.phoneNo;

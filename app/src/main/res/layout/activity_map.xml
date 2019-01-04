@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:maxLength="15"
+                android:maxLength="25"
                 android:maxLines="2"
                 android:text="起始点"
                 android:textSize="@dimen/T_14" />
@@ -73,7 +73,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:maxLength="15"
+                android:maxLength="25"
                 android:maxLines="2"
                 android:text="选择目的地"
                 android:textSize="@dimen/T_14" />

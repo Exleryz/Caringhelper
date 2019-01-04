@@ -8,10 +8,12 @@ import android.telephony.SmsManager;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.model.inner.Point;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.utils.DistanceUtil;
+import com.weimore.caringhelper.config.ConfigKey;
+import com.weimore.util.L;
 import com.weimore.util.PermissionUtil;
+import com.weimore.util.SPUtil;
 import com.weimore.util.ToastUtil;
 
 import java.util.List;
@@ -42,19 +44,26 @@ public class SmsUtils {
                 smsManager.sendTextMessage(tel, null, text, sendPI, null);
             }
             ToastUtil.showShort("短信发送成功");
+            L.d("短信发送成功");
         }, Manifest.permission.SEND_SMS);
 
     }
 
-    public static String addressContent(BDLocation location){
-        return "我当前位置处于" + location.getCity()+location.getDistrict()+location.getStreet() + "," + location.getLocationDescribe();
+    public static String locationModeA(BDLocation location){
+        return SPUtil.getString(ConfigKey.MESSAGE_MODE_A).replace("A",location.getCity()+location.getDistrict()+location.getStreet() + location.getPoiList().get(0).getName());
     }
 
-    public static String addressContent(BDLocation location, SuggestionResult.SuggestionInfo suggestionInfo){
+    public static Double getDistance(BDLocation location, SuggestionResult.SuggestionInfo suggestionInfo){
         LatLng point1 = new LatLng(location.getLatitude(),location.getLongitude());
         LatLng point2 = suggestionInfo.getPt();
-        String distance = String.format("%.2f", DistanceUtil.getDistance(point1,point2)/1000) + " km";
-        return addressContent(location) + "。" + "距离目的地:" + suggestionInfo.city +suggestionInfo.district + suggestionInfo.key + "还有约"+ distance + "。";
+        return DistanceUtil.getDistance(point1,point2)/1000;
+    }
+
+    public static String locationModeB(BDLocation location, SuggestionResult.SuggestionInfo suggestionInfo){
+        String a = location.getCity()+location.getDistrict()+location.getStreet() + location.getPoiList().get(0).getName();
+        String distance = String.format("%.2f km", getDistance(location,suggestionInfo));
+        String b = suggestionInfo.city +suggestionInfo.district + suggestionInfo.key;
+        return SPUtil.getString(ConfigKey.MESSAGE_MODE_B).replace("A",a).replace("B",b).replace("C",distance);
     }
 
 

@@ -23,6 +23,14 @@ public class PermissionUtil {
         void success();
     }
 
+    public interface PermCallback2{
+
+        void success();
+
+        void failure();
+
+    }
+
     public static void permissionRequest(final Context context, final PermissionsCallback callback, final String... permissions) {
         permissionRequest(context,null,callback, permissions);
     }
