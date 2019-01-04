@@ -63,7 +63,7 @@ public class PhoneReceiver extends BroadcastReceiver {
                     L.d("接听");
                 case TelephonyManager.CALL_STATE_RINGING:
                     L.d("响铃:来电号码" + incomingNumber);
-                    Contact contact = ContactBeanHelper.queryOneByPhone(MyApplication.Companion.getContext(), incomingNumber);
+                    Contact contact = ContactBeanHelper.queryOneByPhone(incomingNumber);
                     if(contact==null || !SPUtil.getBoolean(ConfigKey.AUTO_SMS)){
                         return;
                     }

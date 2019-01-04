@@ -85,7 +85,7 @@ public class ExcelUtils {
             Sheet sheet = book.getSheet(0);
             for (int j = 0; j < sheet.getRows(); ++j) {
                 Contact contact = new Contact(sheet.getCell(0, j).getContents(), sheet.getCell(1, j).getContents());
-                ContactBeanHelper.insertData(MyApplication.Companion.getContext(),contact);
+                ContactBeanHelper.insertData(contact);
             }
             book.close();
             return true;

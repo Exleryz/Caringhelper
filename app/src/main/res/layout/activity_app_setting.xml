@@ -91,7 +91,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
-                android:text="创建时间："
+                android:text="注册时间："
                 android:textColor="@color/black"
                 android:textSize="@dimen/T_14" />
 

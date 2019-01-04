@@ -20,6 +20,7 @@ public interface ContactContract {
         void setContactInfo(List<Contact> contactList);
 
         void addPhoneContactInfoSuccess();
+
     }
 
     interface Presenter extends IBasePresenter {
@@ -33,6 +34,22 @@ public interface ContactContract {
          * 通讯录中用户导入白名单
          */
         void getContactFromPhone();
+
+        /**
+         * 插入或更新数据
+         */
+        void insertOrUpdateData(Contact contact);
+
+        /**
+         * 删除数据
+         */
+        void deleteData(Contact contact);
+
+        /**
+         * 同步本地数据至服务器
+         */
+        void syncContactList();
+
     }
 
     interface Model extends IBaseModel {

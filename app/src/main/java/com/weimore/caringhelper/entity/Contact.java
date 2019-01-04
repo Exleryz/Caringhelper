@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.io.Serializable;
+
 /**
  * @author Weimore
  *         2019/1/3.
@@ -16,7 +18,7 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Data
 @Entity
-public class Contact {
+public class Contact{
 
     @Id(autoincrement = true)
     Long id;

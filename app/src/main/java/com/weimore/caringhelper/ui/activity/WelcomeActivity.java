@@ -56,6 +56,7 @@ public class WelcomeActivity extends BaseActivity<WelcomeContract.Presenter> imp
                 //如果有缓存数据，则无需登录
                 MainGroupActivity.startActivity(WelcomeActivity.this);
             } else {
+                ConfigKey.clearInfo();
                 LoginActivity.startActivity(WelcomeActivity.this);
             }
             finish();

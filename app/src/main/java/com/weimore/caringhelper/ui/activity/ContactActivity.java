@@ -15,7 +15,6 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.weimore.base.BaseActivity;
 import com.weimore.base.BaseAdapter;
 import com.weimore.caringhelper.R;
-import com.weimore.caringhelper.base.MyApplication;
 import com.weimore.caringhelper.dao.helper.ContactBeanHelper;
 import com.weimore.caringhelper.databinding.ActivityContactBinding;
 import com.weimore.caringhelper.entity.Contact;
@@ -57,7 +56,7 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
 
     @Override
     public boolean dataBinding() {
-        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_contact);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_contact);
         return true;
     }
 
@@ -83,7 +82,7 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
                 getMPresenter().getContactInfo();
             }
         });
-        mBinding.tvContact.setOnClickListener(v->{
+        mBinding.tvContact.setOnClickListener(v -> {
             PermissionUtil.permissionRequest(this, new PermissionUtil.PermissionsCallback() {
                 @Override
                 public void success() {
@@ -93,22 +92,23 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
             }, Manifest.permission.READ_CONTACTS);
         });
 
-        mBinding.tvAdd.setOnClickListener(v->{
+        mBinding.tvAdd.setOnClickListener(v -> {
             mEditDialog.confirmListener(v12 -> {
-                if(TextUtils.isEmpty(mEditDialog.getNameText())){
+                if (TextUtils.isEmpty(mEditDialog.getNameText())) {
                     showToast("请输入联系用户姓名");
                     return;
                 }
-                if(TextUtils.isEmpty(mEditDialog.getPhoneText())){
+                if (TextUtils.isEmpty(mEditDialog.getPhoneText())) {
                     showToast("请输入号码");
                     return;
                 }
-                Contact contact = new Contact(mEditDialog.getNameText(),mEditDialog.getPhoneText());
-                if(ContactBeanHelper.queryOneByPhone(this,contact.getPhoneNo())!=null){
+                Contact contact = new Contact(mEditDialog.getNameText(), mEditDialog.getPhoneText());
+                if (ContactBeanHelper.queryOneByPhone(contact.getPhoneNo()) != null) {
                     showToast("该号码已在白名单中");
                     return;
                 }
-                ContactBeanHelper.insertData(MyApplication.Companion.getContext(),contact);
+                ContactBeanHelper.insertData(contact);
+                getMPresenter().insertOrUpdateData(contact);
                 mAdapter.addData(contact);
                 mEditDialog.dismiss();
                 showToast("添加成功");
@@ -116,7 +116,7 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
             mEditDialog.show();
         });
 
-        mBinding.tvExcel.setOnClickListener(v->{
+        mBinding.tvExcel.setOnClickListener(v -> {
             ExcelUtils.fileChoose(ContactActivity.this);
         });
     }
@@ -130,8 +130,11 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
     @Override
     public void setContactInfo(List<Contact> contactList) {
         dismissLoading();
-        mAdapter.setData(contactList);
-        mBinding.refreshLayout.finishRefresh();
+        if (contactList != null) {
+            mAdapter.setData(contactList);
+            mBinding.refreshLayout.finishRefresh();
+
+        }
     }
 
     @Override
@@ -166,45 +169,47 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
 
         public ContactHolder(View itemView, BaseAdapter<Contact> adapter) {
             super(itemView, adapter);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         @Override
         protected void bind(Contact item, int position) {
             tvName.setText(item.getName());
             tvPhoneNum.setText(item.getPhoneNo());
-            tvEdit.setOnClickListener(v->{
-                mEditDialog.setNameAndPhone(item.getName(),item.getPhoneNo());
+            tvEdit.setOnClickListener(v -> {
+                mEditDialog.setNameAndPhone(item.getName(), item.getPhoneNo());
                 mEditDialog.confirmListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(TextUtils.isEmpty(mEditDialog.getNameText())){
+                        if (TextUtils.isEmpty(mEditDialog.getNameText())) {
                             showToast("请输入联系用户姓名");
                             return;
                         }
-                        if(TextUtils.isEmpty(mEditDialog.getPhoneText())){
+                        if (TextUtils.isEmpty(mEditDialog.getPhoneText())) {
                             showToast("请输入号码");
                             return;
                         }
-                        Contact contact = new Contact(mEditDialog.getNameText(),mEditDialog.getPhoneText());
-                        Contact otherContact = ContactBeanHelper.queryOneByPhone(MyApplication.Companion.getContext(),contact.getPhoneNo());
-                        if(otherContact!=null && !otherContact.getId().equals(item.getId())){
+                        Contact contact = new Contact(mEditDialog.getNameText(), mEditDialog.getPhoneText());
+                        Contact otherContact = ContactBeanHelper.queryOneByPhone(contact.getPhoneNo());
+                        if (otherContact != null && !otherContact.getId().equals(item.getId())) {
                             showToast("该号码已在白名单中");
                             return;
-                        }else {
+                        } else {
                             contact.setId(item.getId());
-                            ContactBeanHelper.updateData(MyApplication.Companion.getContext(),contact);
+                            ContactBeanHelper.updateData(contact);
+                            getMPresenter().insertOrUpdateData(contact);
                         }
-                        mAdapter.changeItem(position,contact);
+                        mAdapter.changeItem(position, contact);
                         mEditDialog.dismiss();
                         showToast("修改成功");
                     }
                 });
                 mEditDialog.show();
             });
-            tvDelete.setOnClickListener(v->{
+            tvDelete.setOnClickListener(v -> {
                 mDeleteDialog.confirmListener(v1 -> {
-                    ContactBeanHelper.deleteData(MyApplication.Companion.getContext(),item);
+                    getMPresenter().deleteData(item);
+                    ContactBeanHelper.deleteData(item);
                     mAdapter.removeItem(position);
                     mDeleteDialog.dismiss();
                 });
@@ -219,10 +224,11 @@ public class ContactActivity extends BaseActivity<ContactContract.Presenter> imp
         ExcelUtils.onActivityResult(this, requestCode, resultCode, data, new MyCallback<Boolean>() {
             @Override
             public void callback(Boolean aBoolean) {
-                if(aBoolean){
+                if (aBoolean) {
+                    getMPresenter().syncContactList();
                     showToast("数据导入成功");
                     getMPresenter().getContactInfo();
-                }else {
+                } else {
                     showToast("数据导入失败");
                 }
             }

@@ -36,15 +36,15 @@ public class ConfigKey {
     }
 
     public static boolean ifLogin() {
-        return !TextUtils.isEmpty(getPhoneNumber());
+        return !TextUtils.isEmpty(getPhoneNumber()) && getUserId() != 0;
     }
 
-    public static void setUserId(String userId) {
+    public static void setUserId(int userId) {
         SPUtil.put(UserInfo.USER_ID, userId);
     }
 
-    public static String getUserId() {
-        return SPUtil.getString(UserInfo.USER_ID);
+    public static int getUserId() {
+        return SPUtil.getInt(UserInfo.USER_ID);
     }
 
     public static void setPhoneNumber(String phoneNumber) {
@@ -88,7 +88,7 @@ public class ConfigKey {
     }
 
     public static void clearInfo() {
-        setUserId("");
+        setUserId(0);
         setUserName("");
         setPhoneNumber("");
         setCreateTime("");

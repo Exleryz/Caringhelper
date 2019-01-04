@@ -1,5 +1,10 @@
 package com.weimore.caringhelper.entity;
 
+import android.icu.util.LocaleData;
+
+import java.time.LocalDate;
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -13,7 +18,7 @@ public class User {
     /**
      * 用户Id
      */
-    private String id;
+    private int id;
     /**
      * 用户昵称
      */
